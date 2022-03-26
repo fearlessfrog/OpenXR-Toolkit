@@ -106,7 +106,7 @@ namespace toolkit {
         const std::string SettingSaturationGreen = "saturation_green";
         const std::string SettingSaturationBlue = "saturation_blue";
 
-        enum class OverlayType { None = 0, FPS, Advanced, MaxValue };
+        enum class OverlayType { None = 0, FPS, Advanced, Developer, MaxValue };
         enum class MenuFontSize { Small = 0, Medium, Large, MaxValue };
         enum class MenuTimeout { Small = 0, Medium, Large, MaxValue };
         enum class ScalingType { None = 0, NIS, FSR, MaxValue };
@@ -697,6 +697,7 @@ namespace toolkit {
             float fps{0.0f};
             uint64_t appCpuTimeUs{0};
             uint64_t appGpuTimeUs{0};
+            uint64_t waitCpuTimeUs{0};
             uint64_t endFrameCpuTimeUs{0};
             uint64_t preProcessorGpuTimeUs{0};
             uint64_t upscalerGpuTimeUs{0};
