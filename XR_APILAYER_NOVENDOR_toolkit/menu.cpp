@@ -784,7 +784,8 @@ namespace {
                                                      OVERLAY_COMMON);
                                 top += 1.05f * fontSize;
                             }
-
+                        }
+                    }
 #undef GESTURE_STATE
                 }
 #undef OVERLAY_COMMON
