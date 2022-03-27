@@ -165,7 +165,8 @@ namespace {
                     bool isPredictionDampeningSupported,
                     bool isMotionReprojectionRateSupported,
                     uint8_t displayRefreshRate,
-                    uint8_t variableRateShaderMaxDownsamplePow2)
+                    uint8_t variableRateShaderMaxDownsamplePow2,
+                    bool isPimaxFovHackSupported)
             : m_configManager(configManager), m_device(device), m_displayWidth(displayWidth),
               m_displayHeight(displayHeight), m_keyModifiers(keyModifiers),
               m_isHandTrackingSupported(isHandTrackingSupported),
@@ -229,7 +230,7 @@ namespace {
 
             setupPerformanceTab(
                 isMotionReprojectionRateSupported, displayRefreshRate, variableRateShaderMaxDownsamplePow2);
-            setupAppearanceTab();
+            setupAppearanceTab(isPimaxFovHackSupported);
             setupInputsTab(isPredictionDampeningSupported);
             setupMenuTab();
 
@@ -1070,7 +1071,7 @@ namespace {
             performanceTab.finalize();
         }
 
-        void setupAppearanceTab() {
+        void setupAppearanceTab(bool isPimaxFovHackSupported) {
             MenuGroup appearanceTab(
                 m_configManager,
                 m_menuGroups,
@@ -1228,6 +1229,19 @@ namespace {
                  100,
                  [&](int value) { return fmt::format("{}% ({:.1f} deg)", value, m_stats.fovR[3] * 180.0f / M_PI); }});
             fovAdvancedGroup.finalize();
+
+            if (isPimaxFovHackSupported) {
+                m_menuEntries.push_back({MenuIndent::SubGroupIndent,
+                                         "Pimax WFOV Hack",
+                                         MenuEntryType::Choice,
+                                         SettingPimaxFOVHack,
+                                         0,
+                                         1,
+                                         [&](int value) {
+                                             const std::string_view labels[] = {"Off", "On"};
+                                             return std::string(labels[value]);
+                                         }});
+            }
 
             // Must be kept last.
             appearanceTab.finalize();
@@ -1482,7 +1496,8 @@ namespace toolkit::menu {
                                                     bool isPredictionDampeningSupported,
                                                     bool isMotionReprojectionRateSupported,
                                                     uint8_t displayRefreshRate,
-                                                    uint8_t variableRateShaderMaxDownsamplePow2) {
+                                                    uint8_t variableRateShaderMaxDownsamplePow2,
+                                                    bool isPimaxFovHackSupported) {
         return std::make_shared<MenuHandler>(configManager,
                                              device,
                                              displayWidth,
@@ -1492,7 +1507,8 @@ namespace toolkit::menu {
                                              isPredictionDampeningSupported,
                                              isMotionReprojectionRateSupported,
                                              displayRefreshRate,
-                                             variableRateShaderMaxDownsamplePow2);
+                                             variableRateShaderMaxDownsamplePow2,
+                                             isPimaxFovHackSupported);
     }
 
 } // namespace toolkit::menu
